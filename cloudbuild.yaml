@@ -1,4 +1,4 @@
-teps:
+steps:
   - name: gradle:6.8.3-jdk8
     entrypoint: gradle
     args: ["test"]
