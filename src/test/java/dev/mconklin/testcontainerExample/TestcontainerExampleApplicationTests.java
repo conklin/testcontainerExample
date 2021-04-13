@@ -1,5 +1,6 @@
 package dev.mconklin.testcontainerExample;
 
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -8,6 +9,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 import redis.clients.jedis.Jedis;
+
 
 @SpringBootTest
 @Testcontainers
@@ -20,10 +22,17 @@ class TestcontainerExampleApplicationTests {
 
 
     @Test
-    void contextLoads() {
+    void shouldPass() {
         Jedis jedis = new Jedis(redis.getContainerIpAddress(), redis.getMappedPort(6379));
         jedis.append("foo", "bar");
-        System.out.println(jedis.get("foo"));
+        Assert.assertEquals(jedis.get("foo"), "bar");
+    }
+
+    @Test
+    void shouldFail() {
+        Jedis jedis = new Jedis(redis.getContainerIpAddress(), redis.getMappedPort(6379));
+        jedis.append("foo", "bar");
+        Assert.assertEquals(jedis.get("foo"), "zar");
     }
 
 }
